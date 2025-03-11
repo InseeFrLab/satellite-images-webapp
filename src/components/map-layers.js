@@ -96,7 +96,7 @@ export function getClusters(geomData) {
         fillColor: 'transparent',
         fillOpacity: 0,
         color: 'black',
-        weight: 2,
+        weight: 1,
         opacity: 1
       },
         onEachFeature: addToolTip

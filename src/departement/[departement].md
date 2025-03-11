@@ -162,7 +162,7 @@ const buildingLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${yea
 });
 
 
-map.addLayer(buildingLayerEnd);
+//map.addLayer(buildingLayerEnd);
 
 // Ajout des couches par défaut
 OSM['OpenStreetMap clair'].addTo(map);
@@ -214,6 +214,14 @@ legendItems.forEach((item, index) => {
   });
   predictionLayers[layerName] = layer;
 });
+
+
+  const layerName = `all_pred`;
+  const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+    ...selectedPredictions[`Prédictions ${year_end}`].options,
+  });
+  predictionLayers[layerName] = layer;
+
 
 // Ajouter le marqueur à la carte
 marker.addTo(map);
