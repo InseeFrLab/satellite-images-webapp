@@ -209,7 +209,8 @@ legendItems.forEach((item, index) => {
   const layerName = `${item.name}`;
   const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
     ...selectedPredictions[`Prédictions ${year_end}`].options,
-    cql_filter: `label='${index+1}'`  // index correspond maintenant au bon label
+    cql_filter: `label='${index+1}'`,  // index correspond maintenant au bon label
+    zIndex: 9999
   });
   predictionLayers[layerName] = layer;
 });
