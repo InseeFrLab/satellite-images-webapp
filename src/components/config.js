@@ -49,7 +49,7 @@ export const departmentConfig = {
   },
   mayotte: {
     name: "MAYOTTE",
-    availableYears: ["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"],
+    availableYears: ["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"],
     geomFile: () => FileAttachment('../data/mayotte_clusters_geom.json'),
     levelFile: () => FileAttachment('../data/mayotte_clusters_level.parquet'),
     evolFile: () => FileAttachment('../data/mayotte_clusters_evol.parquet'),

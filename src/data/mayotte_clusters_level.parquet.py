@@ -2,7 +2,7 @@ import sys
 
 from utils.wrappers import dataframe_to_parquet_bytes, get_data_level
 
-available_years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+available_years = ["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
 dep = "MAYOTTE"
 model_name = "Segmentation-multiclass"
 model_version = "1"
