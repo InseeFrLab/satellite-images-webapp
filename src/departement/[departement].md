@@ -171,17 +171,6 @@ BORDERS['Contours des îlots'].addTo(map);
 // Ajouter le marqueur à la carte
 marker.addTo(map);
 
-L.control.layers({
-  ...OSM,
-  ...OSMDark,
-  
-  },
-  { ...selectedPleiades,
-  [`Bâtiments ${year_start}`]: buildingLayerStart,
-  [`Bâtiments ${year_end}`]: buildingLayerEnd,
-  }
-  ).addTo(map);
-
 // Définition des labels et couleurs
 const legendItems = [
   {name: "Batiment", color: "rgb(206, 112, 121)"},
@@ -205,8 +194,12 @@ const legendItems = [
 
 // Créer les couches individuelles pour chaque classe
 const predictionLayers = {};
+
+predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
+predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
+
 legendItems.forEach((item, index) => {
-  const layerName = `${item.name}`;
+  const layerName = `${item.name} ${year_end}`;
   const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
     ...selectedPredictions[`Prédictions ${year_end}`].options,
     cql_filter: `label='${index + 1}'`,  // Attention à l'encodage des quotes si nécessaire
@@ -219,10 +212,10 @@ legendItems.forEach((item, index) => {
 const allPredLayer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
   ...selectedPredictions[`Prédictions ${year_end}`].options,
 });
-predictionLayers["all_pred"] = allPredLayer;
+predictionLayers[`Toutes les prédictions multiclasse ${year_end}`] = allPredLayer;
 
 // Ajouter un contrôle de couches à la carte
-L.control.layers(null, predictionLayers, { collapsed: false }).addTo(map);
+L.control.layers({...OSM, ...OSMDark, ...selectedPleiades}, predictionLayers, { collapsed: false }).addTo(map);
 
 // Ajouter le marqueur si besoin
 marker.addTo(map);
@@ -259,22 +252,22 @@ const legend = htl.html`
   </div>
 `;
 
-// Deuxième contrôle : couches de prédiction individuelles avec titre
-const predictionDetailControl = L.control.layers(null, predictionLayers, {
-  position: 'topright',
-  collapsed: true
-}).addTo(map);
+// // Deuxième contrôle : couches de prédiction individuelles avec titre
+// const predictionDetailControl = L.control.layers(null, predictionLayers, {
+//   position: 'topright',
+//   collapsed: true
+// }).addTo(map);
 
-// Ajout d'un titre au contrôle
-const predictionControlDiv = predictionDetailControl.getContainer();
-const title = L.DomUtil.create('div', 'prediction-control-title');
-title.innerHTML = `<h4 style="
-  margin: 0 0 8px 0;
-  padding: 0;
-  color: black;
-  font-size: 14px;
-"> labels ${year_end}</h4>`;
-predictionControlDiv.insertBefore(title, predictionControlDiv.firstChild);
+// // Ajout d'un titre au contrôle
+// const predictionControlDiv = predictionDetailControl.getContainer();
+// const title = L.DomUtil.create('div', 'prediction-control-title');
+// title.innerHTML = `<h4 style="
+//   margin: 0 0 8px 0;
+//   padding: 0;
+//   color: black;
+//   font-size: 14px;
+// "> labels ${year_end}</h4>`;
+// predictionControlDiv.insertBefore(title, predictionControlDiv.firstChild);
 
 // Ajout de la légende à la carte
 mapDiv.appendChild(legend);
