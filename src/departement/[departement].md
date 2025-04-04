@@ -209,21 +209,22 @@ legendItems.forEach((item, index) => {
   const layerName = `${item.name}`;
   const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
     ...selectedPredictions[`Prédictions ${year_end}`].options,
-    cql_filter: `label='${index+1}'`,  // index correspond maintenant au bon label
+    cql_filter: `label='${index + 1}'`,  // Attention à l'encodage des quotes si nécessaire
     zIndex: 9999
   });
   predictionLayers[layerName] = layer;
 });
 
+// Ajouter la couche "all_pred"
+const allPredLayer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_end}`].options,
+});
+predictionLayers["all_pred"] = allPredLayer;
 
-  const layerName = `all_pred`;
-  const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
-    ...selectedPredictions[`Prédictions ${year_end}`].options,
-  });
-  predictionLayers[layerName] = layer;
+// Ajouter un contrôle de couches à la carte
+L.control.layers(null, predictionLayers, { collapsed: false }).addTo(map);
 
-
-// Ajouter le marqueur à la carte
+// Ajouter le marqueur si besoin
 marker.addTo(map);
 
 // Création de la légende à gauche avec texte noir

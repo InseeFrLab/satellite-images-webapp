@@ -11,6 +11,15 @@ import s3fs
 from .fonctions import compute_evolution
 
 
+def connect_s3():
+    fs = s3fs.S3FileSystem(
+        client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
+        key=os.getenv("AWS_ACCESS_KEY_ID"),
+        secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    )
+    return fs
+
+
 def get_data_level(
     available_years: List[int], dep: str, model_name: str, model_version: str
 ) -> pd.DataFrame:
@@ -57,11 +66,7 @@ def get_data_level(
     ```
     """
     # Initialize S3 filesystem connection
-    fs = s3fs.S3FileSystem(
-        client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
-        key=os.getenv("AWS_ACCESS_KEY_ID"),
-        secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    )
+    fs = connect_s3()
 
     # List to store DataFrames for each year
     list_df = []
@@ -140,11 +145,7 @@ def get_data_evol(
     year_pairs = list(combinations(available_years, 2))
 
     # Initialize S3 filesystem connection
-    fs = s3fs.S3FileSystem(
-        client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
-        key=os.getenv("AWS_ACCESS_KEY_ID"),
-        secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    )
+    fs = connect_s3()
 
     # Load data from S3 for each available year
     list_df = []
@@ -202,11 +203,7 @@ def get_cluster_geom(dep: str) -> gpd.GeoDataFrame:
     ```
     """
     # Initialize S3 filesystem connection
-    fs = s3fs.S3FileSystem(
-        client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
-        key=os.getenv("AWS_ACCESS_KEY_ID"),
-        secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    )
+    fs = connect_s3()
 
     # Load and filter Parquet dataset
     clusters = (
