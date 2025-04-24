@@ -7,6 +7,8 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import s3fs
+from geopandas import overlay
+from shapely.geometry import box
 
 from .fonctions import compute_evolution
 
@@ -16,6 +18,7 @@ def connect_s3():
         client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
         key=os.getenv("AWS_ACCESS_KEY_ID"),
         secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        token=os.environ["AWS_SESSION_TOKEN"]
     )
     return fs
 
@@ -171,6 +174,57 @@ def get_data_evol(
     )
 
     return evolution_df
+
+
+def get_build_evol(
+    dep: str, available_years: List[int], model_name: str, model_version: str
+) -> pd.DataFrame:
+    # Generate all unique year pairs for comparison
+    year_pairs = list(combinations(available_years, 2))
+
+    # Initialize S3 filesystem connection
+    fs = connect_s3()
+
+    # Load data from S3 for each available year
+    data_by_year = {}
+
+    for year in available_years:
+        path = f"projet-slums-detection/data-prediction/PLEIADES/{dep}/{year}/{model_name}/{model_version}/predictions.parquet"
+        df = gpd.read_parquet(path, filesystem=fs)
+        df = df[df['label'] == 1][['geometry']].copy()
+        df['geometry'] = df.geometry.apply(lambda geom: box(*geom.bounds))
+        df["year"] = year
+        data_by_year[year] = df.set_geometry('geometry')
+
+    # Calcul des constructions et destructions
+    constructions_list = []
+    destructions_list = []
+
+    for year_start, year_end in year_pairs:
+        data_start = data_by_year[year_start]
+        data_end = data_by_year[year_end]
+
+        data_start = data_start[data_start.is_valid]
+        data_end = data_end[data_end.is_valid]
+
+        # Index spatial automatique avec GeoPandas
+        # Constructions
+        constructions = overlay(data_end, data_start, how='difference')
+        constructions['year_start'] = year_start
+        constructions['year_end'] = year_end
+        constructions_list.append(constructions[['geometry', 'year_start', 'year_end']])
+
+        # Destructions
+        destructions = overlay(data_start, data_end, how='difference')
+        destructions['year_start'] = year_start
+        destructions['year_end'] = year_end
+        destructions_list.append(destructions[['geometry', 'year_start', 'year_end']])
+
+    # Assemblage final
+    constructions_bati_df = pd.concat(constructions_list, ignore_index=True)
+    destructions_bati_df = pd.concat(destructions_list, ignore_index=True)
+
+    return constructions_bati_df, destructions_bati_df
 
 
 def get_cluster_geom(dep: str) -> gpd.GeoDataFrame:

@@ -32,9 +32,6 @@ const evol = await loadDepartmentEvol(department);
 ```
 
 ```js
-```
-
-```js
 const available_years = configg["availableYears"]
 const years_select = view(Inputs.form({
   year_start : Inputs.select(available_years, {value: available_years[0], label: "annee debut"}),
@@ -149,6 +146,30 @@ const PREDICTIONS = getPredictions(configg)
 const selectedPredictions = filterObject(PREDICTIONS, [`Prédictions ${year_start}`, `Prédictions ${year_end}`,])
 
 // Création des couches de prédictions bâtiments pour les deux années
+const buildingLayerStart1 = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_start}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_start}`].options,
+  cql_filter: `label='1'`,
+  styles: 'blanc_opaque',
+});
+
+const buildingLayerEnd1 = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_end}`].options,
+  cql_filter: `label='1'`,
+  styles: 'bleu',
+});
+
+const buildingLayerStart2 = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_start}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_start}`].options,
+  cql_filter: `label='1'`,
+  styles: 'rouge',
+});
+
+const buildingLayerEnd2 = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_end}`].options,
+  cql_filter: `label='1'`,
+  styles: 'blanc_opaque',
+});
+
 const buildingLayerStart = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_start}`]._url, {
   ...selectedPredictions[`Prédictions ${year_start}`].options,
   cql_filter: `label='1'`,
@@ -161,6 +182,9 @@ const buildingLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${yea
   styles: 'contour_rouge',
 });
 
+const constructionLayer = L.layerGroup([buildingLayerEnd1, buildingLayerStart1]);
+
+const destructionLayer = L.layerGroup([buildingLayerStart2, buildingLayerEnd2]);
 
 //map.addLayer(buildingLayerEnd);
 
@@ -197,6 +221,10 @@ const predictionLayers = {};
 
 predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
 predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
+
+predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end}`] = constructionLayer;
+predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end}`] = destructionLayer;
+
 
 legendItems.forEach((item, index) => {
   const layerName = `${item.name} ${year_end}`;
