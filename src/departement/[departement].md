@@ -226,21 +226,27 @@ predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end}`] 
 predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end}`] = destructionLayer;
 
 
-legendItems.forEach((item, index) => {
-  const layerName = `${item.name} ${year_end}`;
-  const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
-    ...selectedPredictions[`Prédictions ${year_end}`].options,
-    cql_filter: `label='${index + 1}'`,  // Attention à l'encodage des quotes si nécessaire
-    zIndex: 9999
-  });
-  predictionLayers[layerName] = layer;
-});
+// legendItems.forEach((item, index) => {
+//   const layerName = `${item.name} ${year_end}`;
+//   const layer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+//     ...selectedPredictions[`Prédictions ${year_end}`].options,
+//     cql_filter: `label='${index + 1}'`,  // Attention à l'encodage des quotes si nécessaire
+//     zIndex: 9999
+//   });
+//   predictionLayers[layerName] = layer;
+// });
 
 // Ajouter la couche "all_pred"
-const allPredLayer = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
+const allPredLayerStart = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_start}`]._url, {
+  ...selectedPredictions[`Prédictions ${year_start}`].options,
+});
+predictionLayers[`Prédictions multiclasse ${year_start}`] = allPredLayerStart;
+
+// Ajouter la couche "all_pred"
+const allPredLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${year_end}`]._url, {
   ...selectedPredictions[`Prédictions ${year_end}`].options,
 });
-predictionLayers[`Toutes les prédictions multiclasse ${year_end}`] = allPredLayer;
+predictionLayers[`Prédictions multiclasse ${year_end}`] = allPredLayerEnd;
 
 // Ajouter un contrôle de couches à la carte
 L.control.layers({...OSM, ...OSMDark, ...selectedPleiades}, predictionLayers, { collapsed: false }).addTo(map);
