@@ -1,9 +1,9 @@
 ```js
-import {loadDepartmentGeom, loadDepartmentLevel, loadDepartmentEvol} from "../components/loaders.js";
+import {loadDepartmentGeom, loadDepartmentLevel, loadDepartmentEvol, loadDepartmentConstructions, loadDepartmentDestructions} from "../components/loaders.js";
 import {getConfig} from "../components/config.js";
 import {transformData} from "../components/build-table.js";
 import {getIlotCentroid} from "../utils/fonctions.js";
-import {getOSM, getOSMDark, getMarker, getSatelliteImages, getPredictions, getClusters, getEvolutions} from "../components/map-layers.js";
+import {getOSM, getOSMDark, getMarker, getSatelliteImages, getPredictions, getClusters, getConstructions, getDestructions, getEvolutions} from "../components/map-layers.js";
 import {filterObject} from "../components/utils.js";
 
 ```
@@ -29,13 +29,16 @@ const configg = getConfig(department);
 const geom = await loadDepartmentGeom(department);
 const level = await loadDepartmentLevel(department);
 const evol = await loadDepartmentEvol(department);
+const constructions = await loadDepartmentConstructions(department);
+const destructions = await loadDepartmentDestructions(department);
 ```
 
 ```js
 const available_years = configg["availableYears"]
+
 const years_select = view(Inputs.form({
-  year_start : Inputs.select(available_years, {value: available_years[0], label: "annee debut"}),
-  year_end : Inputs.select(available_years, {value: available_years[1], label: "annee fin"})
+  year_start : Inputs.select(available_years, {value: available_years[0], label: "Année début"}),
+  year_end : Inputs.select(available_years, {value: available_years[1], label: "Année fin"})
 },
  {
     template: (formParts) => htl.html`
@@ -139,6 +142,31 @@ const OSMDark  = getOSMDark();
 const marker = getMarker(center);
 const BORDERS = getClusters(geom);
 
+const filteredConstructions = constructions.filter(item => item.year_start === year_start && item.year_end === year_end);
+
+const constructionLayer = L.geoJSON(filteredConstructions, {
+      style: {
+      fillColor: 'blue',
+      fillOpacity: 0.5,
+      color: 'blue',
+      weight: 1,
+      opacity: 1
+  },
+});
+
+const filteredDestructions = destructions.filter(item => item.year_start === year_start && item.year_end === year_end);
+
+const destructionLayer = L.geoJSON(filteredDestructions, {
+      style: {
+      fillColor: 'red',
+      fillOpacity: 0.5,
+      color: 'red',
+      weight: 1,
+      opacity: 1
+  },
+});
+
+
 const PLEIADES =  getSatelliteImages(configg);
 const selectedPleiades = filterObject(PLEIADES, [`Pleiades ${year_start}`, `Pleiades ${year_end}`,])
 
@@ -182,15 +210,16 @@ const buildingLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${yea
   styles: 'contour_rouge',
 });
 
-const constructionLayer = L.layerGroup([buildingLayerEnd1, buildingLayerStart1]);
+// const constructionLayer = L.layerGroup([buildingLayerEnd1, buildingLayerStart1]);
 
-const destructionLayer = L.layerGroup([buildingLayerStart2, buildingLayerEnd2]);
+// const destructionLayer = L.layerGroup([buildingLayerStart2, buildingLayerEnd2]);
 
 //map.addLayer(buildingLayerEnd);
 
 // Ajout des couches par défaut
 OSM['OpenStreetMap clair'].addTo(map);
 BORDERS['Contours des îlots'].addTo(map);
+
 
 // Ajouter le marqueur à la carte
 marker.addTo(map);

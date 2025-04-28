@@ -79,6 +79,7 @@ export function getPredictions(config) {
     return predictions;
 }
 
+
 export function getClusters(geomData) {
 
     const addToolTip = (feature, layer) => {

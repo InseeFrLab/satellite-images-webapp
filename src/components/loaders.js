@@ -56,3 +56,39 @@ export async function loadDepartmentEvol(department) {
     }
     
   }
+
+export async function loadDepartmentConstructions(department) {
+    const config = getConfig(department);
+    if (!config) {
+      throw new Error(`Department ${department} not configured`);
+    }
+    
+  
+    try {
+      if (config.constructionsFile) {
+        const fileAttachment = config.constructionsFile();
+        return await fileAttachment.json();
+      }
+    } catch (dataLoadError) {
+      console.warn(`No data file found for ${department}:`, dataLoadError);
+    }
+    
+  }
+
+export async function loadDepartmentDestructions(department) {
+    const config = getConfig(department);
+    if (!config) {
+      throw new Error(`Department ${department} not configured`);
+    }
+    
+  
+    try {
+      if (config.destructionsFileFile) {
+        const fileAttachment = config.destructionsFile();
+        return await fileAttachment.json();
+      }
+    } catch (dataLoadError) {
+      console.warn(`No data file found for ${department}:`, dataLoadError);
+    }
+    
+  }

@@ -86,7 +86,7 @@ def creer_donnees_comparaison(file_paths):
         client_kwargs={"endpoint_url": f"https://{os.environ['AWS_S3_ENDPOINT']}"},
         key=os.getenv("AWS_ACCESS_KEY_ID"),
         secret=os.getenv("AWS_SECRET_ACCESS_KEY"),
-        # token=os.environ["AWS_SESSION_TOKEN"],
+        token=os.environ["AWS_SESSION_TOKEN"],
     )
 
     gdfs = {year: gpd.read_parquet(path, filesystem=fs) for year, path in file_paths.items()}
