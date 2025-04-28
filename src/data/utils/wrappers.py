@@ -201,6 +201,8 @@ def get_build_evol(
         df["year_end"] = year
         data = df[['geometry', 'year_start', 'year_end']]
 
+    data = data.to_crs("EPSG:4326")
+
     return data
 
 
