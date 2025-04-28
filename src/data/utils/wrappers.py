@@ -192,7 +192,7 @@ def get_build_evol(
         path = f"projet-slums-detection/data-prediction/PLEIADES/{dep}/{year}/{model_name}/{model_version}/predictions.parquet"
         df = gpd.read_parquet(path, filesystem=fs)
         df = df[df['label'] == 1][['geometry']].copy()
-        df['geometry'] = df.geometry.apply(lambda geom: box(*geom.bounds))
+        # df['geometry'] = df.geometry.apply(lambda geom: box(*geom.bounds))
         df["year"] = year
         data_by_year[year] = df.set_geometry('geometry')
 

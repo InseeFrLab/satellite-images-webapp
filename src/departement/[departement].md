@@ -222,8 +222,8 @@ const predictionLayers = {};
 predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
 predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 
-predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end}`] = constructionLayer;
-predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end}`] = destructionLayer;
+predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (en bleu)`] = constructionLayer;
+predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (en rouge)`] = destructionLayer;
 
 
 // legendItems.forEach((item, index) => {
@@ -269,7 +269,7 @@ const legend = htl.html`
     overflow-y: auto;
     color: black;  /* Texte en noir */
   ">
-    <h4 style="margin: 0 0 10px 0; color: black;">Légende ${year_end}</h4>
+    <h4 style="margin: 0 0 10px 0; color: black;">Légende multiclasse</h4>
     ${legendItems.map(item => htl.html`
       <div style="display: flex; align-items: center; margin-bottom: 5px">
         <div style="
