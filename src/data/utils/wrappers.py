@@ -184,9 +184,9 @@ def get_build_evol(
 
     if len(available_years) > 1:
         # Load data from S3 for each available year
-        data_list = {}
+        data_list = []
 
-        for year in available_years:
+        for year in available_years[1:]:
             path = f"projet-slums-detection/data-prediction/PLEIADES/{dep}/{year}/{model_name}/{model_version}/{evolution}.parquet"
             df = gpd.read_parquet(path, filesystem=fs)
             data_list.append(df)
