@@ -1,5 +1,9 @@
 # CRaTT
 
+## Pour avoir la géométrie d'ilots au bon millésime :
+La géométrie des ilots est arrêtée chaque année au 31 Octobre de l'année  , c'est cette géographie qui s'applique pendant le RP. (Par ex pour l'enquête annuelle de recensement 2026 on veut la géométrie d'ilots arrêtée au 31 Octobre 2025). Dans tous les cas il faudra s'assurer que le SERN Géographie et le ST Mayotte ont bien les mêmes ilots en tête (il y aura peut être des chnagements hors cardre habituel étant donnée l'urgence).
+On peut la demander au SERN géographie :DR69-SeRN-repertoires-geographie <dr69-sern-repertoires-geographie@insee.fr>
+
 ## Petit ajout Clément :
 - les données sont générées au moment du buil de la page par les codes présents dans le répertrtoire data.
 ces codes peuvent être en n'importe quels langages et doivent juste printer à la fin les data au foormat souhaité (json parquet..)
