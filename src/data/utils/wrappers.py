@@ -177,54 +177,33 @@ def get_data_evol(
 
 
 def get_build_evol(
-    dep: str, available_years: List[int], model_name: str, model_version: str
+    dep: str, available_years: List[int], model_name: str, model_version: str, evolution: str
 ) -> pd.DataFrame:
-    # Generate all unique year pairs for comparison
-    year_pairs = list(combinations(available_years, 2))
-
     # Initialize S3 filesystem connection
     fs = connect_s3()
 
-    # Load data from S3 for each available year
-    data_by_year = {}
+    if len(available_years) > 1:
+        # Load data from S3 for each available year
+        data_list = []
 
-    for year in available_years:
+        for year in available_years[1:]:
+            path = f"projet-slums-detection/data-prediction/PLEIADES/{dep}/{year}/{model_name}/{model_version}/{evolution}.parquet"
+            df = gpd.read_parquet(path, filesystem=fs)
+            data_list.append(df)
+
+        data = pd.concat(data_list, ignore_index=True)
+    else:
+        year = available_years[0]
         path = f"projet-slums-detection/data-prediction/PLEIADES/{dep}/{year}/{model_name}/{model_version}/predictions.parquet"
         df = gpd.read_parquet(path, filesystem=fs)
         df = df[df['label'] == 1][['geometry']].copy()
-        # df['geometry'] = df.geometry.apply(lambda geom: box(*geom.bounds))
-        df["year"] = year
-        data_by_year[year] = df.set_geometry('geometry')
+        df["year_start"] = year
+        df["year_end"] = year
+        data = df[['geometry', 'year_start', 'year_end']]
 
-    # Calcul des constructions et destructions
-    constructions_list = []
-    destructions_list = []
+    data = data.to_crs("EPSG:4326")
 
-    for year_start, year_end in year_pairs:
-        data_start = data_by_year[year_start]
-        data_end = data_by_year[year_end]
-
-        data_start = data_start[data_start.is_valid]
-        data_end = data_end[data_end.is_valid]
-
-        # Index spatial automatique avec GeoPandas
-        # Constructions
-        constructions = overlay(data_end, data_start, how='difference')
-        constructions['year_start'] = year_start
-        constructions['year_end'] = year_end
-        constructions_list.append(constructions[['geometry', 'year_start', 'year_end']])
-
-        # Destructions
-        destructions = overlay(data_start, data_end, how='difference')
-        destructions['year_start'] = year_start
-        destructions['year_end'] = year_end
-        destructions_list.append(destructions[['geometry', 'year_start', 'year_end']])
-
-    # Assemblage final
-    constructions_bati_df = pd.concat(constructions_list, ignore_index=True)
-    destructions_bati_df = pd.concat(destructions_list, ignore_index=True)
-
-    return constructions_bati_df, destructions_bati_df
+    return data
 
 
 def get_cluster_geom(dep: str) -> gpd.GeoDataFrame:
