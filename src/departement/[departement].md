@@ -34,8 +34,8 @@ const evol = await loadDepartmentEvol(department);
 ```js
 const available_years = configg["availableYears"]
 const years_select = view(Inputs.form({
-  year_start : Inputs.select(available_years, {value: available_years[0], label: "annee debut"}),
-  year_end : Inputs.select(available_years, {value: available_years[1], label: "annee fin"})
+  year_start : Inputs.select(available_years, {value: available_years[0], label: "Année debut"}),
+  year_end : Inputs.select(available_years, {value: available_years[1], label: "Année fin"})
 },
  {
     template: (formParts) => htl.html`
@@ -82,8 +82,8 @@ const data_select = transformData(evol, level, year_start, year_end);
         header: {
           depcom_2018: 'Code Commune',
           code: 'Code Îlot',
-          [`aire_${year_end}`]: `Surface ${year_end} (m²)`,
-          [`pourcentage_bati_${year_end}`]: `Bâti ${year_end} (%)`,
+          [`aire_${year_end}`]: `Surface bâtie ${year_end} (m²)`,
+          [`pourcentage_bati_${year_end}`]: `Surface bâtie ${year_end} (%)`,
           evol_abs: 'Écart absolu (m²)',
           evol_rela: 'Écart relatif (%)'
         },
