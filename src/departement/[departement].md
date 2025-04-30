@@ -186,6 +186,17 @@ const constructionLayer = L.layerGroup([buildingLayerEnd1, buildingLayerStart1])
 
 const destructionLayer = L.layerGroup([buildingLayerStart2, buildingLayerEnd2]);
 
+const testLayer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
+            layers: "dirag:MAYOTTE_EVOLUTIONS_2018",
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.0',
+            opacity: 1,
+            maxZoom: 21,
+            styles : "construction_destruction_mayotte_2018",
+            CQL_FILTER: "year_start = 2017 AND evolution = 'construction'"
+        });
+
 //map.addLayer(buildingLayerEnd);
 
 // Ajout des couches par défaut
@@ -224,6 +235,8 @@ predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 
 predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (en bleu)`] = constructionLayer;
 predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (en rouge)`] = destructionLayer;
+
+predictionLayers["Test"] = testLayer
 
 
 // legendItems.forEach((item, index) => {

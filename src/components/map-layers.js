@@ -79,6 +79,31 @@ export function getPredictions(config) {
     return predictions;
 }
 
+export function getBuildingEvolutions(config) {
+    const { availableYears, name } = config;
+    const buildEvolutions = {};
+    const urlGeoServer = "https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms";
+    const workSpace = "dirag";
+
+    // Get tile for each year
+    availableYears.slice(1).forEach(year => {
+        const layer = L.tileLayer.wms(urlGeoServer, {
+            layers: `${workSpace}:${name}_EVOLUTIONS_${year}`,
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.0',
+            opacity: 1,
+            maxZoom: 21,
+            styles : `construction_destruction_${name.toLowerCase()}_${year}`,
+            CQL_FILTER: "INCLUDE"
+        });
+        buildEvolutions[`Evolutions ${year}`] = layer;
+    });
+
+    return buildEvolutions;
+}
+
+
 export function getClusters(geomData) {
 
     const addToolTip = (feature, layer) => {
