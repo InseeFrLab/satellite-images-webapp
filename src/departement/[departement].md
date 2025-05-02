@@ -3,7 +3,7 @@ import {loadDepartmentGeom, loadDepartmentLevel, loadDepartmentEvol} from "../co
 import {getConfig} from "../components/config.js";
 import {transformData} from "../components/build-table.js";
 import {getIlotCentroid} from "../utils/fonctions.js";
-import {getOSM, getOSMDark, getMarker, getSatelliteImages, getPredictions, getClusters, getEvolutions} from "../components/map-layers.js";
+import {getOSM, getOSMDark, getMarker, getSatelliteImages, getPredictions, getClusters, getEvolutions, getBuildingEvolutions} from "../components/map-layers.js";
 import {filterObject} from "../components/utils.js";
 
 ```
@@ -183,19 +183,10 @@ const buildingLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${yea
 });
 
 const constructionLayer = L.layerGroup([buildingLayerEnd1, buildingLayerStart1]);
-
 const destructionLayer = L.layerGroup([buildingLayerStart2, buildingLayerEnd2]);
 
-const testLayer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
-            layers: "dirag:MAYOTTE_EVOLUTIONS_2018",
-            format: 'image/png',
-            transparent: true,
-            version: '1.1.0',
-            opacity: 1,
-            maxZoom: 21,
-            styles : "construction_destruction_mayotte_2018",
-            CQL_FILTER: "year_start = 2017 AND evolution = 'construction'"
-        });
+const constructionLayerClean = getBuildingEvolutions(configg, year_start, year_end, "construction");
+const destructionLayerClean = getBuildingEvolutions(configg, year_start, year_end, "destruction");
 
 //map.addLayer(buildingLayerEnd);
 
@@ -233,10 +224,11 @@ const predictionLayers = {};
 predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
 predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 
-predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (en bleu)`] = constructionLayer;
-predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (en rouge)`] = destructionLayer;
+predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayer;
+predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayer;
 
-predictionLayers["Test"] = testLayer
+predictionLayers[`Constructions clean Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean
+predictionLayers[`Destructions clean Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean
 
 
 // legendItems.forEach((item, index) => {

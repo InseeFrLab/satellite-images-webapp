@@ -79,28 +79,25 @@ export function getPredictions(config) {
     return predictions;
 }
 
-export function getBuildingEvolutions(config) {
+export function getBuildingEvolutions(config, year_start, year_end, evolution) {
     const { availableYears, name } = config;
-    const buildEvolutions = {};
-    const urlGeoServer = "https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms";
-    const workSpace = "dirag";
+    const color = evolution === "destruction" ? "rouge" : "bleu";
+    const evolution2 = evolution === "destruction" ? "construction" : "destruction";
 
-    // Get tile for each year
-    availableYears.slice(1).forEach(year => {
-        const layer = L.tileLayer.wms(urlGeoServer, {
-            layers: `${workSpace}:${name}_EVOLUTIONS_${year}`,
-            format: 'image/png',
-            transparent: true,
-            version: '1.1.0',
-            opacity: 1,
-            maxZoom: 21,
-            styles : `construction_destruction_${name.toLowerCase()}_${year}`,
-            CQL_FILTER: "INCLUDE"
-        });
-        buildEvolutions[`Evolutions ${year}`] = layer;
+    // pb si year_end est egal au min de availableYears
+    // pb si year_end est plus petit de year_start
+
+    const layer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
+        layers: `dirag:${name}_EVOLUTIONS_${year_end}`,
+        format: 'image/png',
+        transparent: true,
+        version: '1.1.0',
+        opacity: 1,
+        maxZoom: 21,
+        styles : color,
+        CQL_FILTER: `year_start = ${year_start} AND evolution = '${evolution2}'`,
     });
-
-    return buildEvolutions;
+    return layer;
 }
 
 
