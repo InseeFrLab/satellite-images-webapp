@@ -227,8 +227,14 @@ predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayer;
 predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayer;
 
-predictionLayers[`Constructions clean Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean
-predictionLayers[`Destructions clean Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean
+if (constructionLayerClean !== null) {
+  predictionLayers[`Constructions clean Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean;
+}
+
+if (destructionLayerClean !== null) {
+  predictionLayers[`Destructions clean Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean;
+}
+
 
 
 // legendItems.forEach((item, index) => {

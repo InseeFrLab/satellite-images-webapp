@@ -82,24 +82,23 @@ export function getPredictions(config) {
 export function getBuildingEvolutions(config, year_start, year_end, evolution) {
     const { availableYears, name } = config;
     const color = evolution === "destruction" ? "rouge" : "bleu";
-    const evolution2 = evolution === "destruction" ? "construction" : "destruction";
 
-    // pb si year_end est egal au min de availableYears
-    // pb si year_end est plus petit de year_start
-
-    const layer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
-        layers: `dirag:${name}_EVOLUTIONS_${year_end}`,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1.0',
-        opacity: 1,
-        maxZoom: 21,
-        styles : color,
-        CQL_FILTER: `year_start = ${year_start} AND evolution = '${evolution2}'`,
-    });
-    return layer;
+    if (year_end !== availableYears[0] && year_start < year_end) {
+        const layer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
+            layers: `dirag:${name}_EVOLUTIONS_${year_end}`,
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.0',
+            opacity: 1,
+            maxZoom: 21,
+            styles: color,
+            CQL_FILTER: `year_start = ${year_start} AND evolution = '${evolution}'`,
+        });
+        return layer;
+    } else {
+        return null;
+    }
 }
-
 
 export function getClusters(geomData) {
 
