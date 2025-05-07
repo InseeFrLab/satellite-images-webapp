@@ -216,7 +216,7 @@ def get_cluster_geom(dep: str) -> gpd.GeoDataFrame:
     )
 
     # Convert "geometry" column from WKT to a GeoSeries
-    clusters["geometry"] = gpd.GeoSeries.from_wkt(clusters["geometry"])
+    clusters["geometry"] = gpd.GeoSeries.from_wkb(clusters["geometry"])
 
     # Select relevant columns and create a GeoDataFrame
     clusters = clusters.loc[:, ["code", "depcom_2018", "geometry"]]
