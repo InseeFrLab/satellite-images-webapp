@@ -18,7 +18,7 @@ function formatdepartmentName(nom) {
   return nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
 }
 // Crée un élément h1 avec le nom du département
-const titre = html`<h1>DROM : ${formatdepartmentName(department)}</h1>`;
+const titre = html`<h1>COM : ${formatdepartmentName(department)}</h1>`;
 display(titre);
 ```
 
