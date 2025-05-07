@@ -218,6 +218,13 @@ def get_cluster_geom(dep: str) -> gpd.GeoDataFrame:
     # Convert "geometry" column from WKT to a GeoSeries
     clusters["geometry"] = gpd.GeoSeries.from_wkb(clusters["geometry"])
 
+    # Supprime les lignes où la géométrie est NaN
+    clusters = clusters[clusters.geometry.notna()]
+
+    # Si nécessaire, filtre aussi les géométries vides ou invalides
+    clusters = clusters[~clusters.geometry.is_empty]
+    clusters = clusters[clusters.is_valid]
+
     # Select relevant columns and create a GeoDataFrame
     clusters = clusters.loc[:, ["code", "depcom_2018", "geometry"]]
     clusters_gdf = gpd.GeoDataFrame(clusters, geometry="geometry", crs="EPSG:4326")
