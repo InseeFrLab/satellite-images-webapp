@@ -162,7 +162,7 @@ export function getIlotCentroid(statistics, depcom, code) {
   }
 
   // Calculate the centroid of the polygon
-  const polygon = feature.geometry.coordinates[0][0]; // Assuming it's a Polygon
+  const polygon = feature.geometry.coordinates[0]; // Assuming it's a Polygon
   let sumX = 0, sumY = 0;
   for (let i = 0; i < polygon.length; i++) {
     sumX += polygon[i][0];
@@ -174,3 +174,4 @@ export function getIlotCentroid(statistics, depcom, code) {
 
   return [centroidX, centroidY];
 }
+
