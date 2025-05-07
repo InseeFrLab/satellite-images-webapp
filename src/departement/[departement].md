@@ -19,10 +19,11 @@ function formatdepartmentName(nom) {
   return nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
 }
 // Crée un élément h1 avec le nom du département
-const titre = html`<h1>Informations géographiques : ${formatdepartmentName(department)}</h1>`;
+const titre = html`<h1>DROM : ${formatdepartmentName(department)}</h1>`;
 display(titre);
 ```
 
+## Statistiques sur les prédictions du bâti par îlot et leur évolution
 
 ```js
 const configg = getConfig(department);
@@ -111,7 +112,7 @@ const data_select = transformData(evol, level, year_start, year_end);
 ```
 
 
-## Analyse des îlots
+## Carte
 
 ```js
 const center = getIlotCentroid(

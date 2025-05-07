@@ -83,7 +83,7 @@ export function getBuildingEvolutions(config, year_start, year_end, evolution) {
     const { availableYears, name } = config;
     const color = evolution === "destruction" ? "rouge" : "bleu";
 
-    if (year_end !== availableYears[0] && year_start < year_end) {
+    if (String(year_end) !== String(availableYears[0]) && parseInt(year_start) < parseInt(year_end)) {
         const layer = L.tileLayer.wms("https://geoserver-satellite-images.lab.sspcloud.fr/geoserver/dirag/wms", {
             layers: `dirag:${name}_EVOLUTIONS_${year_end}`,
             format: 'image/png',

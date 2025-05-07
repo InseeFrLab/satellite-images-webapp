@@ -1,4 +1,4 @@
-// config.js
+,// config.js
 
 export const quantileProbs = [0, 0.25, 0.5, 0.75, 1.0];
 

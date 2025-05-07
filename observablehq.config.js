@@ -7,7 +7,7 @@ export default {
   ],
   pages: [
       {
-        name: "Departements",
+        name: "Évolutions de bâtiments par îlot sur images Pléïades",
         path: "/departement/",
         pages: [
           {name: "Guadeloupe", path: "/departement/guadeloupe"},
@@ -15,7 +15,13 @@ export default {
           {name: "La Réunion", path: "/departement/reunion"},
           {name: "Martinique", path: "/departement/martinique"},
           {name: "Mayotte", path: "/departement/mayotte"},
-          {name: "Saint-Martin", path: "/departement/saint-martin"}
+          // {name: "Saint-Martin", path: "/departement/saint-martin"},
+        ]
+      },
+      {
+        name: "Bâtiments sur images Pléïades",
+        pages: [
+          {name: "Saint-Martin 2024", path: "saint-martin"},
         ]
       },
       {

@@ -4,17 +4,17 @@ toc: false
 
 <div class="hero">
   <h1>CRaTT</h1>
-  <h2> Petite application pour observer les performance des algorithmes de segmentation </h2>
+  <h2> Application pour observer les performances des algorithmes de segmentation du sol </h2>
 </div>
 
-## Sélectionnez un département
+## Sélectionnez un DROM
 
 - [Guadeloupe](/departement/guadeloupe)
 - [Guyane](/departement/guyane)
 - [La Réunion](/departement/reunion)
 - [Martinique](/departement/martinique)
 - [Mayotte](/departement/mayotte)
-- [Saint-Martin](/departement/saint-martin)
+<!-- - [Saint-Martin](/departement/saint-martin) -->
 
 <style>
 

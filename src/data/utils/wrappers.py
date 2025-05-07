@@ -7,8 +7,6 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import s3fs
-from geopandas import overlay
-from shapely.geometry import box
 
 from .fonctions import compute_evolution
 

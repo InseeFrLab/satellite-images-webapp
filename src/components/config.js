@@ -61,8 +61,7 @@ export const departmentConfig = {
     geomFile: () => FileAttachment('../data/saint-martin_clusters_geom.json'),
     // levelFile: () => FileAttachment('../data/saint-martin_clusters_level.parquet'),
     // evolFile: () => FileAttachment('../data/saint-martin_clusters_evol.parquet'),
-    // center: [18.070744391845302, -63.080322797579946],
-
+    center: [18.070744391845302, -63.080322797579946]
   }
 };
 
