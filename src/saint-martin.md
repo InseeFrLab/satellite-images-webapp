@@ -54,6 +54,20 @@ const map = L.map(mapDiv, {
             maxZoom: 21 //(or even higher)
         });
 
+// Charger le CSS et JS du plugin Leaflet Fullscreen
+const fullscreenCss = document.createElement("link");
+fullscreenCss.rel = "stylesheet";
+fullscreenCss.href = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css";
+document.head.appendChild(fullscreenCss);
+
+const fullscreenJs = document.createElement("script");
+fullscreenJs.src = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js";
+document.head.appendChild(fullscreenJs);
+
+fullscreenJs.onload = function() {
+  map.addControl(new L.Control.Fullscreen());
+};
+
 // Ajout d'une couche de base OpenStreetMap
 const OSM = getOSM();
 const OSMDark  = getOSMDark();

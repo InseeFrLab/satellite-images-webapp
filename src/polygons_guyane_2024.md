@@ -7,6 +7,21 @@ mapDiv.style = "height: 80vh; width: 100%; margin: 0 auto;";
 const center = [4.937, -52.330]; // Coordonnées centrales de la Guyane française
 const map = L.map(mapDiv).setView(center, 10.4); // Niveau de zoom ajusté
 
+// Charger le CSS et JS du plugin Leaflet Fullscreen
+const fullscreenCss = document.createElement("link");
+fullscreenCss.rel = "stylesheet";
+fullscreenCss.href = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css";
+document.head.appendChild(fullscreenCss);
+
+const fullscreenJs = document.createElement("script");
+fullscreenJs.src = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js";
+document.head.appendChild(fullscreenJs);
+
+fullscreenJs.onload = function() {
+  map.addControl(new L.Control.Fullscreen());
+};
+
+
 // Ajout d'une couche de base OpenStreetMap
 const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors',

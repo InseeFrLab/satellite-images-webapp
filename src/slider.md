@@ -22,6 +22,20 @@ const mapDiv = html`<div id="map" style="width: 100%; height: 600px;"></div>`;
 // Initialiser la carte centrée sur votre localisation
 const map = L.map(mapDiv).setView([-12.78081553844026, 45.227656507434695], 14);
 
+// Charger le CSS et JS du plugin Leaflet Fullscreen
+const fullscreenCss = document.createElement("link");
+fullscreenCss.rel = "stylesheet";
+fullscreenCss.href = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css";
+document.head.appendChild(fullscreenCss);
+
+const fullscreenJs = document.createElement("script");
+fullscreenJs.src = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js";
+document.head.appendChild(fullscreenJs);
+
+fullscreenJs.onload = function() {
+  map.addControl(new L.Control.Fullscreen());
+};
+
 // Définir la couche "Avant" (par exemple, données de 2022)
 const layerBefore = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; OpenStreetMap contributors',

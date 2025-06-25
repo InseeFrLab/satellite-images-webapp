@@ -5,8 +5,8 @@ import {transformData} from "../components/build-table.js";
 import {getIlotCentroid} from "../utils/fonctions.js";
 import {getOSM, getOSMDark, getMarker, getSatelliteImages, getPredictions, getClusters, getEvolutions, getBuildingEvolutions} from "../components/map-layers.js";
 import {filterObject} from "../components/utils.js";
-
 ```
+
 ```js
 // Get the department from the URL parameter
 const department = new URL(window.location.href).pathname.split('/').pop();
@@ -134,6 +134,20 @@ const map = L.map(mapDiv, {
             maxZoom: 21 //(or even higher)
         });
 
+// Charger le CSS et JS du plugin Leaflet Fullscreen
+const fullscreenCss = document.createElement("link");
+fullscreenCss.rel = "stylesheet";
+fullscreenCss.href = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css";
+document.head.appendChild(fullscreenCss);
+
+const fullscreenJs = document.createElement("script");
+fullscreenJs.src = "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js";
+document.head.appendChild(fullscreenJs);
+
+fullscreenJs.onload = function() {
+  map.addControl(new L.Control.Fullscreen());
+};
+
 // Ajout d'une couche de base OpenStreetMap
 const OSM = getOSM();
 const OSMDark  = getOSMDark();
@@ -225,15 +239,15 @@ const predictionLayers = {};
 predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
 predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 
-predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayer;
-predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayer;
+// predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayer;
+// predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayer;
 
 if (constructionLayerClean !== null) {
-  predictionLayers[`Constructions clean Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean;
+  predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean;
 }
 
 if (destructionLayerClean !== null) {
-  predictionLayers[`Destructions clean Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean;
+  predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean;
 }
 
 
