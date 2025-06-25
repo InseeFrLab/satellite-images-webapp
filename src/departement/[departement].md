@@ -242,6 +242,13 @@ predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 // predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayer;
 // predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayer;
 
+if (department === "mayotte") {
+  const labels_Mayotte_2023 = L.tileLayer.wms(PREDICTIONS[`Labels COSIA 2023`]._url, {
+    ...PREDICTIONS[`Labels COSIA 2023`].options,
+  });
+  predictionLayers[`Labels COSIA 2023`] = labels_Mayotte_2023;
+}
+
 if (constructionLayerClean !== null) {
   predictionLayers[`Constructions Bâtiments entre ${year_start} et ${year_end} (bleu)`] = constructionLayerClean;
 }
@@ -249,7 +256,6 @@ if (constructionLayerClean !== null) {
 if (destructionLayerClean !== null) {
   predictionLayers[`Destructions Bâtiments entre ${year_start} et ${year_end} (rouge)`] = destructionLayerClean;
 }
-
 
 
 // legendItems.forEach((item, index) => {

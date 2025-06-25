@@ -76,6 +76,19 @@ export function getPredictions(config) {
         predictions[`Prédictions ${year}`] = layer;
     });
 
+    if (name === "MAYOTTE") {
+        const layer = L.tileLayer.wms(urlGeoServer, {
+            layers: `${workSpace}:MAYOTTE_LABELS_2023`,
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.0',
+            opacity: 1,
+            maxZoom: 21,
+            styles : "style_multiclass_bis",
+        });
+        predictions[`Labels COSIA 2023`] = layer;
+    }
+
     return predictions;
 }
 
