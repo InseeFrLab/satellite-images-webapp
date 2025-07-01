@@ -236,6 +236,12 @@ const legendItems = [
 // Créer les couches individuelles pour chaque classe
 const predictionLayers = {};
 
+predictionLayers['OpenStreetMap clair'] = OSM['OpenStreetMap clair'];
+predictionLayers['OpenStreetMap sombre'] = OSMDark['OpenStreetMap sombre'];
+predictionLayers['Contours îlots'] = BORDERS['Contours des îlots'];
+predictionLayers[`Pleiades ${year_start}`] = selectedPleiades[`Pleiades ${year_start}`];
+predictionLayers[`Pleiades ${year_end}`] = selectedPleiades[`Pleiades ${year_end}`];
+
 predictionLayers[`Contours Bâtiments ${year_start}`] = buildingLayerStart;
 predictionLayers[`Contours Bâtiments ${year_end}`] = buildingLayerEnd;
 
@@ -281,7 +287,7 @@ const allPredLayerEnd = L.tileLayer.wms(selectedPredictions[`Prédictions ${year
 predictionLayers[`Prédictions multiclasse ${year_end}`] = allPredLayerEnd;
 
 // Ajouter un contrôle de couches à la carte
-L.control.layers({...OSM, ...OSMDark, ...selectedPleiades}, predictionLayers, { collapsed: false }).addTo(map);
+L.control.layers({}, predictionLayers, { collapsed: false }).addTo(map);
 
 // Ajouter le marqueur si besoin
 marker.addTo(map);
